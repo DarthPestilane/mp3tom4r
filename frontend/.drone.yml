@@ -1,0 +1,25 @@
+workspace:
+  base: /drone
+
+clone:
+  git:
+    image: plugins/git
+    depth: 1
+
+pipeline:
+  install:
+    image: node:alpine
+    commands:
+      - npm install --only=prod
+
+  build:
+    image: node:alpine
+    commands:
+      - npm run build
+
+  deploy:
+    image: alpine
+    volumes:
+      - /var/local/www/mp3tom4r/:/var/local/www/mp3tom4r/
+    commands:
+      - cp -r ./dist/. /var/local/www/mp3tom4r/

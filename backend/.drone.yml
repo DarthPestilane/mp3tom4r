@@ -1,0 +1,43 @@
+workspace:
+  base: /drone
+
+clone:
+  git:
+    image: plugins/git
+    depth: 1
+
+pipeline:
+  # restore-cache:
+  #   image: drillster/drone-volume-cache
+  #   restore: true
+  #   mount:
+  #     - /drone/go/pkg
+  #   volumes:
+  #     - /tmp/cache:/cache
+
+  build:
+    # when:
+    #   event: tag
+    image: golang
+    environment:
+      - CGO_ENABLED=0
+      - GOPATH=/drone/go # make sure out of GOPATH
+    commands:
+      - make build
+
+  deploy:
+    # when:
+    #   event: tag
+    image: alpine
+    volumes:
+      - /var/local/mp3tom4r:/var/local/mp3tom4r
+    commands:
+      - cp ./mp3tom4r-server /var/local/mp3tom4r/
+
+  # rebuild-cache:
+  #   image: drillster/drone-volume-cache
+  #   rebuild: true
+  #   mount:
+  #     - /drone/go/pkg
+  #   volumes:
+  #     - /tmp/cache:/cache
