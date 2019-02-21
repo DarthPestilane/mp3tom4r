@@ -10,7 +10,7 @@ pipeline:
   install:
     image: node:alpine
     commands:
-      - npm install --only=prod
+      - npm install
 
   build:
     image: node:alpine

@@ -1,11 +1,19 @@
 <template>
-  <el-col style="min-height:60px;" :span="12" :offset="6" v-loading="loading" element-loading-text="正在解析音频">
+  <el-col
+    style="min-height:60px;"
+    :span="12"
+    :offset="6"
+    v-loading="loading"
+    element-loading-text="正在解析音频"
+  >
     <el-upload
       v-show="!soundReady"
       :on-success="handleUploadSuccess"
       :on-exceed="handleUploadExceed"
+      :on-error="handleUploadError"
       :file-list="[]"
       :action="uploadUrl"
+      accept="audio/mp3"
     >
       <el-button slot="trigger" size="small" type="primary">上传文件</el-button>
     </el-upload>
@@ -110,6 +118,10 @@ export default {
     },
     handleUploadExceed() {
       this.$message.warning(`超过限制`);
+    },
+    handleUploadError(errObj) {
+      var err = JSON.parse(errObj.message);
+      this.$message.error(`上传失败: ${err.error}`);
     },
     initHowl() {
       this.loading = true;
